@@ -4,18 +4,23 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-    @Entity
+@Entity
     public class Expense {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
+        @NotBlank(message = "Title required")
         private String title;
 
-        private double amount;
+        @NotNull(message = "Amount required")
+        private Double amount;
 
+        @NotBlank(message = "category required")
         private String category;
 
         public Expense() {
