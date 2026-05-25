@@ -1,5 +1,8 @@
 package com.dev.expense.tracker.controller;
 
+import com.dev.expense.tracker.dto.ExpenseRequestDTO;
+import com.dev.expense.tracker.dto.ExpenseResponseDTO;
+import org.springframework.http.ResponseEntity;
 import com.dev.expense.tracker.model.Expense;
 import com.dev.expense.tracker.repository.ExpenseRepository;
 import com.dev.expense.tracker.service.ExpenseService;
@@ -19,34 +22,36 @@ public class ExpenseController {
     }
 
     // CREATE
-    @PostMapping
-    public Expense createExpense(@Valid @RequestBody Expense expense) {
-        return expenseService.createExpense(expense);
-    }
 
+    @PostMapping
+    public ExpenseResponseDTO createExpense(
+            @Valid @RequestBody ExpenseRequestDTO expenseRequestDTO) {
+
+        return expenseService.createExpense(expenseRequestDTO);
+    }
 
     // READ
     @GetMapping
-    public List<Expense> getAllExpenses() {
+    public List<ExpenseResponseDTO> getAllExpenses() {
         return expenseService.getAllExpenses();
     }
 
 
     // UPDATE
     @PutMapping("/{id}")
-    public Expense updateExpense(@PathVariable Long id,
-                                 @RequestBody Expense expense) {
+    public ExpenseResponseDTO updateExpense(@PathVariable Long id,
+                                 @Valid @RequestBody ExpenseRequestDTO expenseRequestDTO) {
 
-        return expenseService.updateExpense(id, expense);
+        return expenseService.updateExpense(id, expenseRequestDTO);
     }
 
 
     // DELETE
     @DeleteMapping("/{id}")
-    public String deleteExpense(@PathVariable Long id) {
+    public ResponseEntity<String> deleteExpense(@PathVariable Long id) {
 
         expenseService.deleteExpense(id);
 
-        return "Expense deleted successfully";
+        return ResponseEntity.ok("Expense deleted successfully");
     }
 }
