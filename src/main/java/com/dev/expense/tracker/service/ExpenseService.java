@@ -7,6 +7,10 @@ import com.dev.expense.tracker.model.Expense;
 import com.dev.expense.tracker.repository.ExpenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -34,13 +38,71 @@ public class ExpenseService {
 
         return responseDTO;
     }
-    public List<ExpenseResponseDTO> getAllExpenses() {
+    public Page<ExpenseResponseDTO> getAllExpenses(
+            int page,
+            int size,
+            String sortBy, String direction) {
 
-        List<Expense> expenses = expenseRepository.findAll();
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                sort
+        );
+
+        Page<Expense> expensePage =
+                expenseRepository.findAll(pageable);
+
+        return expensePage.map(expense -> {
+
+            ExpenseResponseDTO dto =
+                    new ExpenseResponseDTO();
+
+            dto.setId(expense.getId());
+            dto.setTitle(expense.getTitle());
+            dto.setAmount(expense.getAmount());
+            dto.setCategory(expense.getCategory());
+
+            return dto;
+        });
+    }
+    // Find by category
+    public List<ExpenseResponseDTO> getExpensesByCategory(
+            String category) {
+
+        List<Expense> expenses =
+                expenseRepository.findByCategory(category);
 
         return expenses.stream().map(expense -> {
 
-            ExpenseResponseDTO dto = new ExpenseResponseDTO();
+            ExpenseResponseDTO dto =
+                    new ExpenseResponseDTO();
+
+            dto.setId(expense.getId());
+            dto.setTitle(expense.getTitle());
+            dto.setAmount(expense.getAmount());
+            dto.setCategory(expense.getCategory());
+
+            return dto;
+
+        }).toList();
+    }
+
+    // search
+    public List<ExpenseResponseDTO> searchExpenses(
+            String keyword) {
+
+        List<Expense> expenses =
+                expenseRepository
+                        .findByTitleContainingIgnoreCase(keyword);
+
+        return expenses.stream().map(expense -> {
+
+            ExpenseResponseDTO dto =
+                    new ExpenseResponseDTO();
 
             dto.setId(expense.getId());
             dto.setTitle(expense.getTitle());
