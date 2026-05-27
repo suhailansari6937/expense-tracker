@@ -1,13 +1,15 @@
 package com.dev.expense.tracker.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
-@Entity
+
+    @Getter
+    @Setter
+    @Entity
     public class Expense {
 
         @Id
@@ -23,38 +25,14 @@ import jakarta.validation.constraints.NotNull;
         @NotBlank(message = "category required")
         private String category;
 
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
         public Expense() {
         }
 
-        public Long getId() {
-            return id;
-        }
 
-        public void setId(Long id) {
-            this.id = id;
-        }
 
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public double getAmount() {
-            return amount;
-        }
-
-        public void setAmount(double amount) {
-            this.amount = amount;
-        }
-
-        public String getCategory() {
-            return category;
-        }
-
-        public void setCategory(String category) {
-            this.category = category;
-        }
-    }
+}

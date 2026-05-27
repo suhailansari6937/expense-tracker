@@ -27,12 +27,20 @@ public class ExpenseController {
 
     // CREATE
 
-    @PostMapping
+    @PostMapping("/users/{userId}")
     public ResponseEntity<ExpenseResponseDTO> createExpense(
-            @Valid @RequestBody ExpenseRequestDTO expenseRequestDTO) {
+
+            @PathVariable Long userId,
+
+            @Valid
+            @RequestBody ExpenseRequestDTO expenseRequestDTO
+    ) {
 
         ExpenseResponseDTO response =
-                expenseService.createExpense(expenseRequestDTO);
+                expenseService.createExpense(
+                        userId,
+                        expenseRequestDTO
+                );
 
         return ResponseEntity.status(201).body(response);
     }
