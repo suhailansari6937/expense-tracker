@@ -114,6 +114,31 @@ public class ExpenseService {
 
         }).toList();
     }
+    // Get expenses by user
+    public List<ExpenseResponseDTO> getExpensesByUser(Long userId) {
+
+        // check user exists
+        userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found"));
+
+        List<Expense> expenses =
+                expenseRepository.findByUserId(userId);
+
+        return expenses.stream().map(expense -> {
+
+            ExpenseResponseDTO dto =
+                    new ExpenseResponseDTO();
+
+            dto.setId(expense.getId());
+            dto.setTitle(expense.getTitle());
+            dto.setAmount(expense.getAmount());
+            dto.setCategory(expense.getCategory());
+
+            return dto;
+
+        }).toList();
+    }
 
     // search
     public List<ExpenseResponseDTO> searchExpenses(

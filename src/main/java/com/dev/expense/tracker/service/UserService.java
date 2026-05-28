@@ -4,15 +4,20 @@ import com.dev.expense.tracker.dto.UserRequestDTO;
 import com.dev.expense.tracker.dto.UserResponseDTO;
 import com.dev.expense.tracker.model.User;
 import com.dev.expense.tracker.repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class UserService {
+
+    private final BCryptPasswordEncoder passwordEncoder;
+
     private final UserRepository userRepository;
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
+        this.passwordEncoder=passwordEncoder;
     }
 
     //CREATE USer
@@ -22,6 +27,10 @@ public class UserService {
 
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
+
+        user.setPassword(
+                passwordEncoder.encode(dto.getPassword())
+        );
 
         User savedUser = userRepository.save(user);
 

@@ -9,5 +9,6 @@ import java.util.List;
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     List<Expense> findByCategory(String category);
     List<Expense> findByTitleContainingIgnoreCase(String title);
+    List<Expense> findByUserId(Long userId);
 }
 

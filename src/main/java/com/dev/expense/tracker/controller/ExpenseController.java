@@ -72,6 +72,14 @@ public class ExpenseController {
                 expenseService.getExpensesByCategory(category)
         );
     }
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<List<ExpenseResponseDTO>> getExpensesByUser(
+            @PathVariable Long userId) {
+
+        return ResponseEntity.ok(
+                expenseService.getExpensesByUser(userId)
+        );
+    }
     // search
     @GetMapping("/search/{keyword}")
     public ResponseEntity<List<ExpenseResponseDTO>>
