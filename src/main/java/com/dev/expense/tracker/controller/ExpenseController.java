@@ -27,20 +27,12 @@ public class ExpenseController {
 
     // CREATE
 
-    @PostMapping("/users/{userId}")
+    @PostMapping
     public ResponseEntity<ExpenseResponseDTO> createExpense(
-
-            @PathVariable Long userId,
-
-            @Valid
-            @RequestBody ExpenseRequestDTO expenseRequestDTO
-    ) {
+            @RequestBody ExpenseRequestDTO dto) {
 
         ExpenseResponseDTO response =
-                expenseService.createExpense(
-                        userId,
-                        expenseRequestDTO
-                );
+                expenseService.createExpense(dto);
 
         return ResponseEntity.status(201).body(response);
     }
@@ -72,12 +64,10 @@ public class ExpenseController {
                 expenseService.getExpensesByCategory(category)
         );
     }
-    @GetMapping("/users/{userId}")
-    public ResponseEntity<List<ExpenseResponseDTO>> getExpensesByUser(
-            @PathVariable Long userId) {
-
+    @GetMapping("/my-expenses")
+    public ResponseEntity<List<ExpenseResponseDTO>> getMyExpenses() {
         return ResponseEntity.ok(
-                expenseService.getExpensesByUser(userId)
+                expenseService.getMyExpenses()
         );
     }
     // search

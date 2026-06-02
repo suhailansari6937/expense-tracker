@@ -10,6 +10,34 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(
+            EmailAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Map<String, String>
+    handleEmailAlreadyExistsException(
+            EmailAlreadyExistsException ex) {
+
+        Map<String, String> error =
+                new HashMap<>();
+
+        error.put("message",
+                ex.getMessage());
+
+        return error;
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public Map<String, String> handleAccessDeniedException(
+            AccessDeniedException ex) {
+
+        Map<String, String> error = new HashMap<>();
+
+        error.put("message", ex.getMessage());
+
+        return error;
+    }
+
     // Validation Exception
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

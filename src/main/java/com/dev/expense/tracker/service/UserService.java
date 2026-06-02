@@ -2,6 +2,7 @@ package com.dev.expense.tracker.service;
 
 import com.dev.expense.tracker.dto.UserRequestDTO;
 import com.dev.expense.tracker.dto.UserResponseDTO;
+import com.dev.expense.tracker.exception.EmailAlreadyExistsException;
 import com.dev.expense.tracker.model.User;
 import com.dev.expense.tracker.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,7 +23,12 @@ public class UserService {
 
     //CREATE USer
     public UserResponseDTO createUser(UserRequestDTO dto){
-
+        if (userRepository.findByEmail(dto.getEmail())
+                .isPresent()) {
+            System.out.println("EMAIL ALREADY EXISTS");
+            throw new EmailAlreadyExistsException(
+                    "Email already exists");
+        }
         User user = new User();
 
         user.setName(dto.getName());
