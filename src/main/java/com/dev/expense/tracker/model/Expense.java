@@ -3,6 +3,7 @@ package com.dev.expense.tracker.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,6 +25,9 @@ import lombok.Setter;
 
         @NotBlank(message = "category required")
         private String category;
+
+        @NotNull(message = "Expense date is required")
+        private LocalDate expenseDate;
 
 
     @ManyToOne

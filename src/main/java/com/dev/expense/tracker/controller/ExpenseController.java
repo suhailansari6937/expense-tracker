@@ -2,6 +2,7 @@ package com.dev.expense.tracker.controller;
 
 import com.dev.expense.tracker.dto.ExpenseRequestDTO;
 import com.dev.expense.tracker.dto.ExpenseResponseDTO;
+import com.dev.expense.tracker.dto.ExpenseSummaryDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +14,9 @@ import com.dev.expense.tracker.service.ExpenseService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.YearMonth;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/expenses")
@@ -98,5 +101,22 @@ public class ExpenseController {
         expenseService.deleteExpense(id);
 
         return ResponseEntity.ok("Expense deleted successfully");
+    }
+
+    // summary
+    @GetMapping("/summary")
+    public ExpenseSummaryDTO getSummary() {
+        return expenseService.getSummary();
+    }
+
+
+    @GetMapping("/category-summary")
+    public Map<String, Double> getCategorySummary() {
+        return expenseService.getCategorySummary();
+    }
+
+    @GetMapping("/monthly-summary")
+    public Map<YearMonth, Double> getMonthlySummary() {
+        return expenseService.getMonthlySummary();
     }
 }

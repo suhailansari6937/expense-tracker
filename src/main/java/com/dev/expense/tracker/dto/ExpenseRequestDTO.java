@@ -2,7 +2,11 @@ package com.dev.expense.tracker.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
+import java.time.LocalDate;
+
+@Data
 public class ExpenseRequestDTO {
     @NotBlank(message = "Title is required")
     private String title;
@@ -13,27 +17,8 @@ public class ExpenseRequestDTO {
     @NotBlank(message = "Category is required")
     private String category;
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    @NotNull(message = "Expense date is required")
+    private LocalDate expenseDate;
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
 
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getCategory() {
-        return category;
-    }
 }

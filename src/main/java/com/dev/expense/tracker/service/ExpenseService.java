@@ -2,6 +2,7 @@ package com.dev.expense.tracker.service;
 
 import com.dev.expense.tracker.dto.ExpenseResponseDTO;
 import com.dev.expense.tracker.dto.ExpenseRequestDTO;
+import com.dev.expense.tracker.dto.ExpenseSummaryDTO;
 import com.dev.expense.tracker.exception.AccessDeniedException;
 import com.dev.expense.tracker.exception.ResourceNotFoundException;
 import com.dev.expense.tracker.model.Expense;
@@ -16,7 +17,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.time.YearMonth;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ExpenseService {
@@ -52,6 +56,7 @@ public class ExpenseService {
         expense.setTitle(dto.getTitle());
         expense.setAmount(dto.getAmount());
         expense.setCategory(dto.getCategory());
+        expense.setExpenseDate(dto.getExpenseDate());
 
         // RELATIONSHIP SETTING
         expense.setUser(user);
@@ -66,6 +71,7 @@ public class ExpenseService {
         responseDTO.setTitle(savedExpense.getTitle());
         responseDTO.setAmount(savedExpense.getAmount());
         responseDTO.setCategory(savedExpense.getCategory());
+        responseDTO.setExpenseDate(savedExpense.getExpenseDate());
 
         return responseDTO;
     }
@@ -96,6 +102,7 @@ public class ExpenseService {
             dto.setTitle(expense.getTitle());
             dto.setAmount(expense.getAmount());
             dto.setCategory(expense.getCategory());
+            dto.setExpenseDate(expense.getExpenseDate());
 
             return dto;
         });
@@ -116,6 +123,7 @@ public class ExpenseService {
             dto.setTitle(expense.getTitle());
             dto.setAmount(expense.getAmount());
             dto.setCategory(expense.getCategory());
+            dto.setExpenseDate(expense.getExpenseDate());
 
             return dto;
 
@@ -146,6 +154,7 @@ public class ExpenseService {
             dto.setTitle(expense.getTitle());
             dto.setAmount(expense.getAmount());
             dto.setCategory(expense.getCategory());
+            dto.setExpenseDate(expense.getExpenseDate());
 
             return dto;
 
@@ -169,6 +178,7 @@ public class ExpenseService {
             dto.setTitle(expense.getTitle());
             dto.setAmount(expense.getAmount());
             dto.setCategory(expense.getCategory());
+            dto.setExpenseDate(expense.getExpenseDate());
 
             return dto;
 
@@ -200,6 +210,7 @@ public class ExpenseService {
         expense.setTitle(updatedExpense.getTitle());
         expense.setAmount(updatedExpense.getAmount());
         expense.setCategory(updatedExpense.getCategory());
+        expense.setExpenseDate(updatedExpense.getExpenseDate());
 
         Expense savedExpense =
                 expenseRepository.save(expense);
@@ -211,6 +222,7 @@ public class ExpenseService {
         responseDTO.setTitle(savedExpense.getTitle());
         responseDTO.setAmount(savedExpense.getAmount());
         responseDTO.setCategory(savedExpense.getCategory());
+        responseDTO.setExpenseDate(savedExpense.getExpenseDate());
 
         return responseDTO;
     }
@@ -239,6 +251,84 @@ public class ExpenseService {
         }
 
         expenseRepository.delete(expense);
+    }
+
+    // to get summary
+    public ExpenseSummaryDTO getSummary() {
+
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User not found"));
+
+        List<Expense> expenses =
+                expenseRepository.findByUserId(user.getId());
+
+        long totalExpenses = expenses.size();
+
+        double totalAmount = expenses.stream()
+                .mapToDouble(Expense::getAmount)
+                .sum();
+
+        return new ExpenseSummaryDTO(
+                totalExpenses,
+                totalAmount
+        );
+    }
+
+    public Map<String, Double> getCategorySummary() {
+
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User not found"));
+
+        List<Expense> expenses =
+                expenseRepository.findByUserId(user.getId());
+
+        return expenses.stream()
+                .collect(Collectors.groupingBy(
+                        Expense::getCategory,
+                        Collectors.summingDouble(
+                                Expense::getAmount
+                        )
+                ));
+    }
+
+    public Map<YearMonth, Double> getMonthlySummary() {
+
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User not found"));
+
+        List<Expense> expenses =
+                expenseRepository.findByUserId(user.getId());
+
+        return expenses.stream()
+                .collect(Collectors.groupingBy(
+                        expense -> YearMonth.from(
+                                expense.getExpenseDate()
+                        ),
+                        Collectors.summingDouble(
+                                Expense::getAmount
+                        )
+                ));
     }
 
 
