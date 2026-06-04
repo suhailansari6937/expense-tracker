@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import com.dev.expense.tracker.model.Expense;
 import com.dev.expense.tracker.repository.ExpenseRepository;
@@ -14,6 +15,7 @@ import com.dev.expense.tracker.service.ExpenseService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
@@ -119,4 +121,17 @@ public class ExpenseController {
     public Map<YearMonth, Double> getMonthlySummary() {
         return expenseService.getMonthlySummary();
     }
+// for date range query
+@GetMapping("/filter")
+public List<ExpenseResponseDTO> getExpensesByDateRange(
+        @RequestParam
+        @DateTimeFormat(pattern = "dd-MM-yyyy")
+        LocalDate startDate,
+
+        @RequestParam
+        @DateTimeFormat(pattern = "dd-MM-yyyy")
+        LocalDate endDate) {
+
+    return expenseService.getExpensesByDateRange(startDate, endDate);
+}
 }

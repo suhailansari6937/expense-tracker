@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
@@ -329,6 +330,51 @@ public class ExpenseService {
                                 Expense::getAmount
                         )
                 ));
+    }
+    public List<ExpenseResponseDTO> getExpensesByDateRange(
+            LocalDate startDate,
+            LocalDate endDate) {
+        if(startDate.isAfter(endDate)){
+            throw new IllegalArgumentException(
+                    "Start date cannot be after end date"
+            );
+        }
+
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User not found"));
+
+        List<Expense> expenses =
+                expenseRepository
+                        .findByUserIdAndExpenseDateBetween(
+                                user.getId(),
+                                startDate,
+                                endDate
+                        );
+
+        return expenses.stream()
+                .map(expense -> {
+
+                    ExpenseResponseDTO dto =
+                            new ExpenseResponseDTO();
+
+                    dto.setId(expense.getId());
+                    dto.setTitle(expense.getTitle());
+                    dto.setAmount(expense.getAmount());
+                    dto.setCategory(expense.getCategory());
+                    dto.setExpenseDate(
+                            expense.getExpenseDate()
+                    );
+
+                    return dto;
+                })
+                .toList();
     }
 
 

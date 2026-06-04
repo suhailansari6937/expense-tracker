@@ -1,6 +1,7 @@
 package com.dev.expense.tracker.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,5 +66,17 @@ public class GlobalExceptionHandler {
         error.put("message", ex.getMessage());
 
         return error;
+    }
+
+    @ExceptionHandler(BudgetAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>>
+    handleBudgetAlreadyExists(
+            BudgetAlreadyExistsException ex) {
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Map.of(
+                        "message",
+                        ex.getMessage()
+                ));
     }
 }
