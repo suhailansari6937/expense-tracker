@@ -22,6 +22,12 @@ function Dashboard() {
       <Link to="/expenses">
         View Expenses
       </Link>
+<br />
+<br />
+      
+      <Link to="/budgets">
+  View Budgets
+</Link>
     </div>
   );
 }
