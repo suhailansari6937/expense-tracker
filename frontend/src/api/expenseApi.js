@@ -32,3 +32,10 @@ export const updateExpense = async (id, expenseData) => {
 
   return response.data;
 };
+export const getExpenseSummary = async () => {
+  const response = await axiosInstance.get(
+    "/expenses/summary"
+  );
+
+  return response.data;
+};
