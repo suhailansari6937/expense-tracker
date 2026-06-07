@@ -64,7 +64,9 @@ const currentYear =
 
   return (
     <div>
-      <h1>Dashboard</h1>
+     <h1 className="text-4xl font-bold text-blue-600">
+  Dashboard
+</h1>
 
       {error && <p>{error}</p>}
 

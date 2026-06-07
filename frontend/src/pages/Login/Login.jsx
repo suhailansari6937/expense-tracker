@@ -23,45 +23,102 @@ function Login() {
     }
   };
 
-  return (
-    <div>
-      <h1>Login</h1>
+return (
+  <div className="min-h-screen
+flex
+items-center
+justify-center
+bg-gradient-to-br
+from-red-900
+via-slate-800
+to-black
+"
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            type="email"
-            placeholder="Enter email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
+>
+    <div className="border border-gray-200 bg-white p-10 rounded-2xl shadow-2xl w-full max-w-md min-h-[450px]">
+    <div className="flex justify-center mb-4">
+  <div className="w-18 h-16 rounded-full bg-white-600 flex items-center justify-center text-black text-5xl font-bold">
+    ₹
+  </div>
+</div>
+      <h1 className="
+      shadow -lg
+text-4xl
+font-bold
+text-center
+text-black-600
+mb-6
+">
+  Expense Tracker
+</h1>
+<p className="text-center text-gray-500 mb-6">
+  Track your expenses and budgets effortlessly
+</p>
 
-        <br />
+      <form onSubmit={handleSubmit} className="space-y-4">
 
-        <div>
-          <input
-            type="password"
-            placeholder="Enter password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
+        <input
+          type="email"
+          placeholder="Enter email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="
+w-full
+border
+rounded-lg
+p-3
+focus:outline-none
+focus:ring-1
+focus:ring-blue-400
+"
+        />
 
-        <br />
+        <input
+          type="password"
+          placeholder="Enter password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full border rounded-lg p-3"
+        />
 
-        <button type="submit">
+        <button
+          type="submit"
+          className="
+w-full
+bg-blue-600
+text-white
+p-3
+rounded-xl
+font-semibold
+hover:bg-blue-700
+transition
+duration-300
+"
+        >
           Login
         </button>
+
       </form>
 
-      {error && <p>{error}</p>}
-     
-<p>
-  Don't have an account? <Link to="/register">Register</Link>
-</p>
+      {error && (
+        <p className="text-red-500 mt-4">
+          {error}
+        </p>
+      )}
+
+      <p className="mt-4 text-center">
+        Don't have an account?{" "}
+        <Link
+          to="/register"
+          className="text-blue-600 hover:underline"
+        >
+          Register
+        </Link>
+      </p>
+
     </div>
-  );
+  </div>
+);
 }
 
 export default Login;
