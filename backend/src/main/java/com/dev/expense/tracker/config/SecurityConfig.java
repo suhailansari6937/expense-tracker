@@ -71,7 +71,8 @@ public class SecurityConfig {
                 new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(
-                "http://localhost:5173"
+                "http://localhost:5173",
+                "https://expense-tracker-nu-nine-91.vercel.app"
         ));
 
         configuration.setAllowedMethods(List.of(
