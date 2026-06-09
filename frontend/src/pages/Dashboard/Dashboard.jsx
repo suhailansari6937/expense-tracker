@@ -98,9 +98,9 @@ function Dashboard() {
 
             <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center">
               <img
-                src="/dashboard-illustration.png"
-                alt="Dashboard illustration"
-                className="hidden w-48 object-contain md:block lg:w-60"
+              src="/expense.png"
+              alt="Dashboard illustration"
+              className="hidden w-48 object-contain mix-blend-multiply md:block lg:w-60"
               />
 
               <button
